@@ -13,6 +13,8 @@
                  [ring/ring-defaults "0.3.2"]
                  ; Clojure data.JSON library
                  [org.clojure/data.json "0.2.6"]
+                 ; for JSON parse https://github.com/dakrone/cheshire
+                 [cheshire "5.10.0"]
                  ]
   :main ^:skip-aot rest-demo.core
   :target-path "target/%s"
