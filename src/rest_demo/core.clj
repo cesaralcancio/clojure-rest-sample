@@ -4,17 +4,24 @@
             [ring.middleware.defaults :as ring.middleware]
             [compojure.route :as route]
             [rest-demo.handler.peopleHandler :as people.handler]
-            [rest-demo.handler.exampleHandler :as example.handler])
+            [rest-demo.handler.exampleHandler :as example.handler]
+            [rest-demo.handler.clientHandler :as client.handler])
   (:gen-class))
 
-(compojure/defroutes app-routes
-           (compojure/GET "/" [] example.handler/simple-body-page)
-           (compojure/GET "/request" [] example.handler/request-example)
-           (compojure/POST "/json" [] example.handler/json-example)
-           (compojure/GET "/hello" [] example.handler/hello-name)
-           (compojure/GET "/people" [] people.handler/people-handler)
-           (compojure/GET "/people/add" [] people.handler/addperson-handler)
-           (route/not-found "Error, page not found!"))
+(compojure/defroutes
+  app-routes
+  ; Examples
+  (compojure/GET "/" [] example.handler/simple-body-page)
+  (compojure/GET "/request" [] example.handler/request-example)
+  (compojure/POST "/json" [] example.handler/json-example)
+  (compojure/GET "/hello" [] example.handler/hello-name)
+  ; People
+  (compojure/GET "/people" [] people.handler/people-handler)
+  (compojure/GET "/people/add" [] people.handler/addperson-handler)
+  ; Client
+  (compojure/POST "/client" [] client.handler/addclient-handler)
+  ; Not found services
+  (route/not-found "Error, page not found!"))
 
 (defn -main
   "This is our main entry point"

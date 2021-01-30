@@ -10,5 +10,5 @@
                                  :email      email
                                  :birthdate  birthdate
                                  :created_at (new java.util.Date)}))
-(add-client! "Cesar Augusto" "Alcancio de Souza" "cesar.alcancio@gmail.com" "1991-05-09")
+(add-client! "Jose" "Antonio" "jose@gmail.com" "1991-01-01")
 (pp/pprint client-collection)
