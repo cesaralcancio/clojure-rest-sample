@@ -4,47 +4,10 @@
             [compojure.route :as route]
             [ring.middleware.defaults :refer :all]
             [clojure.pprint :as pp]
-            [clojure.string :as str]
-            [clojure.data.json :as json]
             [cheshire.core :refer :all]
-            [ring.util.request :as ru])
+            [ring.util.request :as ru]
+            [rest-demo.handler.peopleHandler :as people.handler])
   (:gen-class))
-
-; my people-collection mutable collection vector
-(def people-collection (atom []))
-
-;Collection Helper functions to add a new person
-(defn addperson [firstname surname]
-  (swap! people-collection conj {:firstname (str/capitalize firstname)
-                                 :surname   (str/capitalize surname)}))
-
-; Example JSON objects
-(addperson "Functional" "Human")
-(addperson "Micky" "Mouse")
-(addperson "Cesar" "Alcancio")
-(addperson "Paula" "Honda")
-(println @people-collection)
-
-; Return List of People
-(defn people-handler [req]
-  {:status  200
-   :headers {"Content-Type" "text/json"}
-   :body    (str (json/write-str @people-collection))})
-
-; Get the parameter specified by pname from :params object in req
-(defn getparameter [req pname]
-  (let [something (get (:params req) pname)]
-    (println "something: " something)
-    something
-    ))
-
-(defn addperson-handler [req]
-  {:status  200
-   :headers {"Content-type" "text/json"}
-   :body    (-> (let [p (partial getparameter req)]
-                  ; to understand partial function https://clojuredocs.org/clojure.core/partial
-                  (println "partial: " p)
-                  (str (json/write-str (addperson (p :firstname) (p :surname))))))})
 
 ; Simple Body Page
 (defn simple-body-page [req]
@@ -52,7 +15,7 @@
    :headers {"Content-Type" "text/html"}
    :body    "Hello World"})
 
-; request-example
+; Request-example
 (defn request-example [req]
   {:status  200
    :headers {"Content-Type" "text/html"}
@@ -60,13 +23,13 @@
               (pp/pprint req)
               (str "Request Object: " req))})
 
-; json-example
+; Json-example
 (defn json-example [req]
   {:status  200
    :headers {"Content-Type" "text/json"}
-   :body    (let [tipo (type req)
-                  corpo (:body req)
-                  corpo-str1 (str corpo)
+   :body    (let [; tipo (type req)
+                  ; corpo (:body req)
+                  ; corpo-str1 (str corpo)
                   corpo-str (ru/body-string req)
                   mapa (parse-string corpo-str true)
                   nome (:firstname mapa)]
@@ -79,6 +42,7 @@
               nome
               )})
 
+; Hello Example
 (defn hello-name [req]
   {:status  200
    :headers {"Content-Type" "text/html"}
@@ -91,9 +55,8 @@
            (GET "/request" [] request-example)
            (POST "/json" [] json-example)
            (GET "/hello" [] hello-name)
-           (GET "/people" [] people-handler)
-           (GET "/people/add" [] addperson-handler)
-           ; (POST "/people/add" [] addperson-handler)
+           (GET "/people" [] people.handler/people-handler)
+           (GET "/people/add" [] people.handler/addperson-handler)
            (route/not-found "Error, page not found!"))
 
 (defn -main
