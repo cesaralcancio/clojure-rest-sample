@@ -30,6 +30,15 @@
                   birthday (:birthday map-json)
                   response (client.model/add-client! firstname surname email birthday)]
               (cheshire/generate-string response))})
+
+(defn remove-client-handler [req]
+  {:status  200
+   :headers {"Content-type" "text/json"}
+   :body    (let [uuid (:uuid (:route-params req))]
+              (client.model/remove-client! uuid)
+              (-> {:message "Successfully removed"} cheshire/generate-string)
+              )})
+
 ; testing
 ;(let [lista (client.model/add-client! "Jose" "Augusto" "jose@gmail.com" "1991-05-01")]
 ;  (println lista)
