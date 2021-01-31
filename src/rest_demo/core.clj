@@ -19,6 +19,8 @@
   (compojure/GET "/people" [] people.handler/people-handler)
   (compojure/GET "/people/add" [] people.handler/addperson-handler)
   ; Client
+  (compojure/GET "/clients" [] client.handler/clients-handler)
+  (compojure/GET "/client/:uuid" [] client.handler/client-handler)
   (compojure/POST "/client" [] client.handler/addclient-handler)
   ; Not found services
   (route/not-found "Error, page not found!"))
