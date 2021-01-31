@@ -8,12 +8,12 @@
 
 (defn date-gen [] (new java.util.Date))
 
-(defn valida-uuid [uuid]
+(defn generate-uuid-if-blank [uuid]
   (if-let [validated-uuid (or (nil? uuid) (s/blank? uuid))]
     (uuid-gen) uuid))
-(valida-uuid nil)
-(valida-uuid "")
-(valida-uuid "123")
+(generate-uuid-if-blank nil)
+(generate-uuid-if-blank "")
+(generate-uuid-if-blank "123")
 
 (defn add-client!
   ([firstname surname email birthday]
@@ -23,7 +23,7 @@
                 email
                 birthday))
   ([uuid firstname surname email birthday]
-   (let [new-client {:uuid       (valida-uuid uuid)
+   (let [new-client {:uuid       (generate-uuid-if-blank uuid)
                      :firstname  firstname
                      :surname    surname
                      :email      email
@@ -37,7 +37,13 @@
 
 (defn remove-client! [uuid]
   (swap! client-collection remove-client uuid))
-(remove-client! "123")
+
+(defn update-client!
+  [uuid firstname surname email birthday]
+  (remove-client! uuid)
+  (add-client! uuid firstname surname email birthday))
 
 (add-client! "123" "Jose" "Antonio" "jose@gmail.com" "1991-01-01")
+(pp/pprint client-collection)
+(remove-client! "123")
 (pp/pprint client-collection)

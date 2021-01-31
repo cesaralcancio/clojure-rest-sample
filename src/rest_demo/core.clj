@@ -22,6 +22,7 @@
   (compojure/GET "/clients" [] client.handler/clients-handler)
   (compojure/GET "/client/:uuid" [] client.handler/client-handler)
   (compojure/POST "/client" [] client.handler/addclient-handler)
+  (compojure/PATCH "/client" [] client.handler/updateclient-handler)
   (compojure/DELETE "/client/:uuid" [] client.handler/remove-client-handler)
   ; Not found services
   (route/not-found "Error, page not found!"))

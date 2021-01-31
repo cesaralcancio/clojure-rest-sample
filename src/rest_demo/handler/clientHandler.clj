@@ -48,6 +48,24 @@
                              birthday)]
               (cheshire/generate-string response))})
 
+(defn updateclient-handler [req]
+  {:status  200
+   :headers {"Content-Type" "text/json"}
+   :body    (let [str-json (r.u.request/body-string req)
+                  map-json (cheshire/parse-string str-json true)
+                  uuid (:uuid map-json)
+                  firstname (:firstname map-json)
+                  surname (:surname map-json)
+                  email (:email map-json)
+                  birthday (:birthday map-json)
+                  response (client.model/update-client!
+                             uuid
+                             firstname
+                             surname
+                             email
+                             birthday)]
+              (cheshire/generate-string response))})
+
 (defn remove-client-handler [req]
   {:status  200
    :headers {"Content-type" "text/json"}
